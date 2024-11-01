@@ -1,13 +1,30 @@
 # coding: utf-8
 
+import io
+import json
+import os
+import random
+from PIL import Image, ImageDraw, ImageFont
 from aiogram import types
 from aiogram.types import InputFile
-from PIL import Image, ImageDraw, ImageFont
-import io
-import random
 
 USER_BASE = {}
 
+def populate_base(chat_id: int | str):
+    if str(chat_id) in USER_BASE:
+        return
+
+    USER_BASE.update({
+        str(chat_id): {
+            "_isUpdated": False,
+            "ID": chat_id,
+            "Messages": [],
+            "Attachments": [],
+            "OffUntil": 0
+        }
+    })
+
+@DP.message_handler(commands=["mem"])
 async def generate_mem(msg: types.Message):
     messages = USER_BASE[str(msg.chat.id)]["Messages"][-5:]
 
@@ -32,6 +49,4 @@ async def generate_mem(msg: types.Message):
 
     await msg.answer_photo(photo=InputFile(byte_io, filename='meme.jpg'))
 
-def setup_handlers(dp):
-    dp.message_handler(commands=["mem"])(generate_mem)
-    # Добавьте другие обработчики здесь, если необходимо
+# Убедитесь, что здесь есть другие функции, если они нужны
