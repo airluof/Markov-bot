@@ -117,7 +117,7 @@ async def message_handler(msg: MessageType):
     if msg.reply_to_message and not is_triggered:
         is_triggered = msg.reply_to_message.from_user.id == BOT.id
 
-    if random.randint(1, 100) > (80 if is_triggered else 8):
+    if random.randint(1, 100) > (50 if is_triggered else 20):
         return
 
     model = markovify.NewlineText("\n".join(USER_BASE[str(msg.chat.id)]["Messages"]).lower())
