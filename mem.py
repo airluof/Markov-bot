@@ -1,11 +1,15 @@
+# coding: utf-8
+
 from aiogram import types
 from aiogram.types import InputFile
 from PIL import Image, ImageDraw, ImageFont
 import io
+import random
 
-@DP.message_handler(commands=["mem"])
+USER_BASE = {}
+
 async def generate_mem(msg: types.Message):
-    messages = USER_BASE[str(msg.chat.id)]["Messages"][-10:]  # Измените 5 на 10
+    messages = USER_BASE[str(msg.chat.id)]["Messages"][-5:]
 
     if not messages:
         await msg.answer("Недостаточно сообщений для создания мема.")
@@ -27,3 +31,7 @@ async def generate_mem(msg: types.Message):
     byte_io.seek(0)
 
     await msg.answer_photo(photo=InputFile(byte_io, filename='meme.jpg'))
+
+def setup_handlers(dp):
+    dp.message_handler(commands=["mem"])(generate_mem)
+    # Добавьте другие обработчики здесь, если необходимо
