@@ -7,6 +7,7 @@ import random
 from PIL import Image, ImageDraw, ImageFont
 from aiogram import types
 from aiogram.types import InputFile
+from aiogram import Dispatcher
 
 USER_BASE = {}
 
@@ -24,7 +25,6 @@ def populate_base(chat_id: int | str):
         }
     })
 
-@DP.message_handler(commands=["mem"])
 async def generate_mem(msg: types.Message):
     messages = USER_BASE[str(msg.chat.id)]["Messages"][-5:]
 
@@ -49,4 +49,5 @@ async def generate_mem(msg: types.Message):
 
     await msg.answer_photo(photo=InputFile(byte_io, filename='meme.jpg'))
 
-# Убедитесь, что здесь есть другие функции, если они нужны
+def register_handlers(dp: Dispatcher):
+    dp.register_message_handler(generate_mem, commands=["mem"])
