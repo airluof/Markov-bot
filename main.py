@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import asyncio
+from mem import populate_base  # Импортируйте функцию, если она в другом файле
 from datetime import datetime
 import json
 import os
@@ -29,6 +30,9 @@ BOT = aiogram.Bot(
     parse_mode=aiogram.types.ParseMode.HTML
 )
 DP = Dispatcher(BOT)
+
+# Настройка middleware
+DP.middleware.setup(BotMessagesMiddleware(populate_base))
 
 USER_BASE = {}
 
